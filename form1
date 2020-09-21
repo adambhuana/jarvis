@@ -1,0 +1,39 @@
+Public Class Form1
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        txt1.Enabled = True
+        txt2.Enabled = False
+        tombol.Enabled = False
+    End Sub
+    Private Sub tombol_Click(sender As Object, e As EventArgs) Handles tombol.Click
+        Dim input1 As Integer
+        Dim input2 As Integer
+        Dim hasil As Integer
+        Dim output As String
+        input1 = Int(txt1.Text)
+        input2 = Int(txt2.Text)
+        hasil = input1 + input2
+        output = "Hasil Penjumlahan: " + hasil.ToString
+        Label2.Text = output
+        txt1.Text = ""
+        txt2.Text = ""
+        txt1.Enabled = True
+        txt2.Enabled = False
+        tombol.Enabled = False
+
+    End Sub
+
+    Private Sub txt1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txt1.KeyPress
+        txt2.Enabled = True
+    End Sub
+    Private Sub txt2_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txt2.KeyPress
+        tombol.Enabled = True
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        My.Forms.Form3.Show()
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs)
+        My.Forms.Form2.Show()
+    End Sub
+End Class
