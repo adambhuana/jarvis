@@ -1,0 +1,118 @@
+Imports System.Speech.Recognition
+Imports System.Threading
+Imports System.Globalization
+Public Class Form3
+    Dim recog As New SpeechRecognizer
+    Dim gram As Grammar
+    Dim input1 As Integer
+    Dim input2 As Integer
+    Dim hasil As Integer
+    Dim output As String
+    ' events
+    Public Event SpeechRecognized As _
+     EventHandler(Of SpeechRecognizedEventArgs)
+    Public Event SpeechRecognitionRejected As _
+     EventHandler(Of SpeechRecognitionRejectedEventArgs)
+    ' word list
+    Dim wordlist As String() = New String() {"jarvis", "yes", "no"}
+    ' word recognised event
+    Public Sub recevent(ByVal sender As System.Object,
+      ByVal e As RecognitionEventArgs)
+
+        If (e.Result.Text = "jarvis") Then
+            Dim sapi
+            sapi = CreateObject("sapi.spvoice")
+            sapi.speak("ok sir")
+            txt1.Enabled = True
+            txt1.Focus()
+        ElseIf (e.Result.Text = "yes") Then
+            txt1.Enabled = True
+            txt1.Clear()
+            txt2.Enabled = False
+            txt2.Clear()
+            tombol.Enabled = False
+            Label2.Text = "?"
+            Dim sapi
+            sapi = CreateObject("sapi.spvoice")
+            sapi.speak("ready")
+        ElseIf (e.Result.Text = "no") Then
+            Dim sapi
+            sapi = CreateObject("sapi.spvoice")
+            sapi.speak("Thank You")
+            My.Forms.Form3.Close()
+        ElseIf (e.Result.Text = "hi") Then
+            Dim sapi
+            sapi = CreateObject("sapi.spvoice")
+            sapi.speak("hello")
+
+        End If
+
+    End Sub
+    Public Sub recfailevent(ByVal sender As System.Object,
+      ByVal e As RecognitionEventArgs)
+        'Dim sapi
+        'sapi = CreateObject("sapi.spvoice")
+        'sapi.speak("Sorry, Could not Understand")
+    End Sub
+    Private Sub Form3_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        txt1.Enabled = False
+        txt2.Enabled = False
+        tombol.Enabled = False
+        Dim words As New Choices(wordlist)
+        gram = New Grammar(New GrammarBuilder(words))
+        recog.LoadGrammar(gram)
+        ' add handlers for the recognition events
+        AddHandler recog.SpeechRecognized, AddressOf Me.recevent
+        AddHandler recog.SpeechRecognitionRejected, AddressOf Me.recfailevent
+        ' enable the recogniser
+        recog.Enabled = True
+    End Sub
+    Private Sub tombol_Click(sender As Object, e As EventArgs) Handles tombol.Click
+        input1 = CInt(txt1.Text)
+        input2 = CInt(txt2.Text)
+        hasil = input1 + input2
+        output = "Hasilnya: " + hasil.ToString
+        Label2.Text = output
+        Dim sapi
+        sapi = CreateObject("sapi.spvoice")
+        sapi.speak("equal")
+        sapi.speak("do you want to continue")
+    End Sub
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        My.Forms.Form1.Show()
+    End Sub
+
+    Private Sub txt2_TextChanged(sender As Object, e As EventArgs) Handles txt2.TextChanged
+
+    End Sub
+
+    Private Sub txt1_TextChanged(sender As Object, e As EventArgs) Handles txt1.TextChanged
+
+    End Sub
+
+    Private Sub txt1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txt1.KeyPress
+        txt2.Enabled = True
+    End Sub
+
+    Private Sub txt2_TextAlignChanged(sender As Object, e As EventArgs) Handles txt2.TextAlignChanged
+
+    End Sub
+
+    Private Sub txt2_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txt2.KeyPress
+    End Sub
+
+    Private Sub txt1_KeyDown(sender As Object, e As KeyEventArgs) Handles txt1.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            SendKeys.Send("{TAB}")
+        End If
+    End Sub
+
+    Private Sub txt2_KeyDown(sender As Object, e As KeyEventArgs) Handles txt2.KeyDown
+        tombol.Enabled = True
+        If e.KeyCode = Keys.Enter Then
+            SendKeys.Send("{TAB}")
+            SendKeys.Send("{TAB}")
+        End If
+
+    End Sub
+End Class
